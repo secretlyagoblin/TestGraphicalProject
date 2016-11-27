@@ -1,0 +1,16 @@
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\bin\Debug\TestGraphicalProject.exe.config
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\bin\Debug\TestGraphicalProject.exe
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\bin\Debug\TestGraphicalProject.pdb
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.csprojResolveAssemblyReference.cache
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\MainWindow.g.cs
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\App.g.cs
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject_MarkupCompile.cache
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject_MarkupCompile.lref
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\MainWindow.baml
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.g.resources
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.Properties.Resources.resources
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.csproj.GenerateResource.Cache
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.exe
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject.pdb
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\bin\Debug\Text.txt
+C:\Users\Chris\Desktop\TestProject\TestGraphicalProject\TestGraphicalProject\obj\Debug\TestGraphicalProject_Content.g.cs
