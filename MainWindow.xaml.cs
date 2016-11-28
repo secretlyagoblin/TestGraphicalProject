@@ -23,6 +23,7 @@ namespace TestGraphicalProject {
 
         Canvas _mainCanvas;
         GraphicsController _graphicsController;
+        TextBlock _notification;
 
         string _filePath = Environment.CurrentDirectory;
         string _fileName = "Text.txt";     
@@ -30,6 +31,7 @@ namespace TestGraphicalProject {
         public MainWindow()
         {
             InitializeComponent();
+            InitialiseNotification();
 
             _mainCanvas = MainCanvas;
             _graphicsController = new GraphicsController(_mainCanvas);
@@ -47,19 +49,24 @@ namespace TestGraphicalProject {
         /// <summary>
         /// Initialises the main Canvas
         /// </summary>
+        /// 
 
-        void ShowNotification(string notification)
+        void InitialiseNotification()
         {
-            _graphicsController.ClearCanvas();
+            _notification = new TextBlock();
+            _notification.FontSize = 30;
+            _notification.VerticalAlignment = VerticalAlignment.Center;
+            _notification.HorizontalAlignment = HorizontalAlignment.Center;
 
-            var textBlock = new TextBlock();
-            textBlock.Text = notification;
-            textBlock.FontSize = 30;
-            textBlock.Text = notification;
-            textBlock.VerticalAlignment = VerticalAlignment.Center;
-            textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            RootGrid.Children.Add(_notification);
 
-            RootGrid.Children.Add(textBlock);
+            ChangeNotification("", false);
+        }
+
+        void ChangeNotification(string notification, bool isVisible)
+        {
+            _notification.Text = notification;
+            _notification.Visibility = isVisible?Visibility.Visible:Visibility.Hidden;
         }
 
         void SetGraphicsController(string fileName)
@@ -72,13 +79,13 @@ namespace TestGraphicalProject {
                 }
                 else
                 {
-                    ShowNotification("Error reading text file");
+                    ChangeNotification("Error reading text file", true);
                 }
 
             }
             else
             {
-                ShowNotification("No file at location");
+                ChangeNotification("No file at location", true);
             }
         }
 
@@ -114,13 +121,17 @@ namespace TestGraphicalProject {
 
         void OnChanged(object source, FileSystemEventArgs e)
         {
-            _graphicsController.
+            Dispatcher.Invoke(() =>
+            {
+                ReloadFile();
+            });
+        }
 
+        void ReloadFile()
+        {
             _graphicsController.ClearCanvas();
+            ChangeNotification("", false);
             SetGraphicsController(_fileName);
-            _graphicsController.DrawShapes();
-
-            //Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
         }
 
         void OnRenamed(object source, RenamedEventArgs e)
