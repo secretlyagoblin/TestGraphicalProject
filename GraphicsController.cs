@@ -16,8 +16,11 @@ namespace TestGraphicalProject {
 
         Canvas _canvas;
         Storyboard _storyboard;
-        List<Shape> _shapeList;
+        List<ShapeAnimation> _shapeList;
         Random _random;
+
+        string[] _animTypes = { "vert", "hor", "circ", "box" };
+        string[] _shapeTypes = { "square", "tri", "circ", "hex" };
 
         /// <summary>
         /// Initialises the main Canvas, but doesn't run anything yet
@@ -26,7 +29,7 @@ namespace TestGraphicalProject {
         {
             _canvas = canvas;
             _storyboard = new Storyboard();
-            _shapeList = new List<Shape>();
+            _shapeList = new List<ShapeAnimation>();
             _random = new Random();
         }
 
@@ -46,18 +49,22 @@ namespace TestGraphicalProject {
                     var line = stream.ReadLine();
                     Console.WriteLine(line);
 
-                    if(line == "Gunch")
+                    if (IsAnimation(line))
                     {
-                        throw new Exception("ghost");
+                        
+                    } else if (IsShape(line))
+                    {
+                        _shapeList.Add(new ShapeAnimation(line));
                     }
+                    else if (IsMisc(line))
+                    {
 
-                    var shape = new Rectangle();
-                    shape.Stroke = new SolidColorBrush(Colors.Red);
-                    shape.Fill = new SolidColorBrush(Colors.White);
-                    shape.Width = _random.Next(5, 60);
-                    shape.Height = _random.Next(5, 60);
-                    
-                    _shapeList.Add(shape);
+                    }
+                    else
+                    {
+                        stream.Close();
+                        return false;
+                    }
                 }
 
                 stream.Close();
@@ -67,16 +74,41 @@ namespace TestGraphicalProject {
             {
                 return false;
             }
-
-
-
         }
+
+        //Checking validity of string
+
+        bool IsAnimation(string testString)
+        {
+            var stringArray = testString.ToLower().Split(new char[] { ' ' });
+
+            if (stringArray[0] != "Anim")
+                return false;
+
+            //Here we need to parse stuff
+
+            //if(stringArray[1].)
+
+            return false;
+        }
+
+        bool IsShape(string testString)
+        {
+            return true;
+        }
+
+        bool IsMisc(string testString)
+        {
+            return false;
+        }
+
+        //Dealing with canvas
 
         public void DrawShapes()
         {
             for (int i = 0; i < _shapeList.Count; i++)
             {
-                var shape = _shapeList[i];
+                var shape = _shapeList[i].Shape;
 
                 Canvas.SetLeft(shape, _random.Next(0, 100)) ;
                 Canvas.SetTop(shape, _random.Next(0, 100));
@@ -93,5 +125,24 @@ namespace TestGraphicalProject {
             _canvas.Children.Clear();
         }
 
+
+
+        class ShapeAnimation {
+
+            public Shape Shape
+            { get; private set; }
+
+            public bool IsValid
+            { get; private set; }
+
+            public ShapeAnimation(string shapeString)
+            {
+                Shape = new Rectangle();
+                Shape.Stroke = new SolidColorBrush(Colors.Red);
+                Shape.Fill = new SolidColorBrush(Colors.White);
+                Shape.Width = 20;
+                Shape.Height = 20;
+            }
+        }
     }
 }
