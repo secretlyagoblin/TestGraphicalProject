@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Controls;
@@ -36,13 +36,13 @@ namespace TestGraphicalProject {
         /// <summary>
         /// Returns false if fails
         /// </summary>
-        public bool LoadShapeFile(string filePath)
+        public bool LoadShapeFile(string fileName)
         {
             _shapeList.Clear();
 
             try
             {
-                var stream = File.OpenText(filePath);
+                var stream = File.OpenText(fileName);
 
                 while (!stream.EndOfStream)
                 {
@@ -122,7 +122,16 @@ namespace TestGraphicalProject {
 
         public void ClearCanvas()
         {
-            _canvas.Children.Clear();
+            _canvas.Children.Clear();      
+        }
+
+        public void ReloadCanvas()
+        {
+            _canvas.Dispatcher.Invoke(() =>
+            {
+                _canvas.Children.Clear();
+                DrawShapes();
+            });
         }
 
 

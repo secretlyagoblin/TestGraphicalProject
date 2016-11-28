@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,7 +24,8 @@ namespace TestGraphicalProject {
         Canvas _mainCanvas;
         GraphicsController _graphicsController;
 
-        string _filePath = "Text.txt";        
+        string _filePath = Environment.CurrentDirectory;
+        string _fileName = "Text.txt";     
 
         public MainWindow()
         {
@@ -36,26 +37,16 @@ namespace TestGraphicalProject {
             Run();
         }
 
+        
         void Run()
         {
-            //CreateFileWatcher(_filePath);
-            SetGraphicsController(_filePath);
+            CreateFileWatcher(_filePath, _fileName);
+            SetGraphicsController(_fileName);
         }
 
         /// <summary>
         /// Initialises the main Canvas
         /// </summary>
-
-        bool SetTextFile(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                _filePath = filePath;
-                return true;
-            }
-            
-            return false;
-        }
 
         void ShowNotification(string notification)
         {
@@ -71,14 +62,11 @@ namespace TestGraphicalProject {
             RootGrid.Children.Add(textBlock);
         }
 
-        void SetGraphicsController(string filePath)
+        void SetGraphicsController(string fileName)
         {
-            if (SetTextFile(filePath))
+            if (File.Exists(fileName))
             {
-                //CreateFileWatcher(filePath);
-
-
-                if (_graphicsController.LoadShapeFile(_filePath))
+                if (_graphicsController.LoadShapeFile(fileName))
                 {
                     _graphicsController.DrawShapes();
                 }
@@ -102,7 +90,7 @@ namespace TestGraphicalProject {
 
         // Handling text file reloading
 
-        void CreateFileWatcher(string path)
+        void CreateFileWatcher(string path, string file)
         {
             // Create a new FileSystemWatcher and set its properties.
             FileSystemWatcher watcher = new FileSystemWatcher();
@@ -112,7 +100,7 @@ namespace TestGraphicalProject {
             watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
                | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             // Only watch text files.
-            watcher.Filter = "*.txt";
+            watcher.Filter = file;
 
             // Add event handlers.
             watcher.Changed += new FileSystemEventHandler(OnChanged);
@@ -126,11 +114,13 @@ namespace TestGraphicalProject {
 
         void OnChanged(object source, FileSystemEventArgs e)
         {
-            // Specify what is done when a file is changed, created, or deleted.
+            _graphicsController.
 
-            
+            _graphicsController.ClearCanvas();
+            SetGraphicsController(_fileName);
+            _graphicsController.DrawShapes();
 
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+            //Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
         }
 
         void OnRenamed(object source, RenamedEventArgs e)
