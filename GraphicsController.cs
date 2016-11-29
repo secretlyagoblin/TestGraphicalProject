@@ -62,6 +62,7 @@ namespace TestGraphicalProject {
                         }
                         else
                         {
+                            stream.Close();
                             return false;
                         }
                     }
@@ -230,9 +231,9 @@ namespace TestGraphicalProject {
 
                 if (attribute == _attributes[0]) //size
                 {
-                    int size;
+                    double size;
 
-                    if (!int.TryParse(value, out size))
+                    if (!double.TryParse(value, out size))
                     {
                         return false;
                     }
