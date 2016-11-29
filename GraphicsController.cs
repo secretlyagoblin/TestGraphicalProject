@@ -16,11 +16,8 @@ namespace TestGraphicalProject {
 
         Canvas _canvas;
         Storyboard _storyboard;
-        List<ShapeAnimation> _shapeList;
+        List<MyShape> _shapeList;
         Random _random;
-
-        string[] _animTypes = { "vert", "hor", "circ", "box" };
-        string[] _shapeTypes = { "square", "tri", "circ", "hex" };
 
         /// <summary>
         /// Initialises the main Canvas, but doesn't run anything yet
@@ -29,7 +26,7 @@ namespace TestGraphicalProject {
         {
             _canvas = canvas;
             _storyboard = new Storyboard();
-            _shapeList = new List<ShapeAnimation>();
+            _shapeList = new List<MyShape>();
             _random = new Random();
         }
 
@@ -47,18 +44,26 @@ namespace TestGraphicalProject {
                 while (!stream.EndOfStream)
                 {
                     var line = stream.ReadLine();
-                    Console.WriteLine(line);
+                    //Console.WriteLine(line);
 
-                    if (IsAnimation(line))
+                    var stringArray = line.ToLower().Split(new char[] { ' ' });
+                    var identifier = stringArray[0];
+
+                    if (MyAnimation.Identifier ==identifier)
                     {
                         
-                    } else if (IsShape(line))
-                    {
-                        _shapeList.Add(new ShapeAnimation(line));
-                    }
-                    else if (IsMisc(line))
-                    {
+                    } else if (MyShape.Identifier == identifier)
+                    { 
+                        var shape = new MyShape();
 
+                        if (shape.TryParseLine(stringArray))
+                        {
+                            _shapeList.Add(shape);
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else
                     {
@@ -74,32 +79,6 @@ namespace TestGraphicalProject {
             {
                 return false;
             }
-        }
-
-        //Checking validity of string
-
-        bool IsAnimation(string testString)
-        {
-            var stringArray = testString.ToLower().Split(new char[] { ' ' });
-
-            if (stringArray[0] != "Anim")
-                return false;
-
-            //Here we need to parse stuff
-
-            //if(stringArray[1].)
-
-            return false;
-        }
-
-        bool IsShape(string testString)
-        {
-            return true;
-        }
-
-        bool IsMisc(string testString)
-        {
-            return false;
         }
 
         //Dealing with canvas
@@ -134,24 +113,147 @@ namespace TestGraphicalProject {
             });
         }
 
+        //Utils for Shape stuff
+
+        static bool MatchesTypeArray(string testString, string[] typeArray)
+        {
+            for (int i = 0; i < typeArray.Length; i++)
+            {
+                if(testString == typeArray[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static bool MatchesAttributePattern(string testString, string[] attributes)
+        {
+            var array = testString.Split(new char[] { '=' });
+
+            if (array.Length != 2)
+                return false;
 
 
-        class ShapeAnimation {
+
+            return (MatchesTypeArray(array[0], attributes));
+        }
+
+
+
+        class MyShape {
+
+            public static readonly string Identifier = "shape";
+            static readonly string[] _shapeTypes = { "hexagon", "square", "circle", "triangle" };
+            static readonly string[] _attributes = { "size" };
 
             public Shape Shape
             { get; private set; }
 
-            public bool IsValid
-            { get; private set; }
+            
 
-            public ShapeAnimation(string shapeString)
+            public MyShape()
             {
-                Shape = new Rectangle();
+            }
+
+            public bool TryParseLine(string[] line)
+            {
+
+                if (line[0] != Identifier)
+                {
+                    return false;
+                }
+
+                if (MatchesTypeArray(line[1], _shapeTypes))
+                {
+                    SetShape(line[1]);
+                }
+
+                else
+                {
+                    return false;
+                }
+
+                //we start at 1 as first line section has been vetted
+
+                for (int i = 2; i < line.Length; i++)
+                {
+                    if(MatchesAttributePattern(line[i], _attributes))
+                    {
+                        if (TrySetAttribute(line[i]))
+                        {
+
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            void SetShape(string code)
+            {
+                if(code == _shapeTypes[0]) //hexagon
+                {
+                    Shape = new Polygon();
+                    //Add Corners
+                }
+                else if (code == _shapeTypes[1]) //square
+                {
+                    Shape = new Rectangle();
+                }
+                else if (code == _shapeTypes[2])//circle
+                {
+                    Shape = new Ellipse();
+                }
+                else if (code == _shapeTypes[3])//triangle
+                {
+                    Shape = new Polygon();
+                }
+
                 Shape.Stroke = new SolidColorBrush(Colors.Red);
                 Shape.Fill = new SolidColorBrush(Colors.White);
                 Shape.Width = 20;
                 Shape.Height = 20;
             }
+
+            bool TrySetAttribute(string code)
+            {
+                var array = code.Split(new char[] { '=' });
+
+                string attribute = array[0];
+                string value = array[1];
+
+
+                if (attribute == _attributes[0]) //size
+                {
+                    int size;
+
+                    if (!int.TryParse(value, out size))
+                    {
+                        return false;
+                    }
+                    Shape.Width = size;
+                    Shape.Height = size;
+
+                    return true;
+                }
+                return false;
+            }
+
+        }
+
+        class MyAnimation {
+
+            public static readonly string Identifier = "anim";
+            static readonly string[] _shapeTypes = { "vertical", "horizontal", "circle", "box" };
+            static readonly string[] _attributes = { "moverate" };
+
+
+
         }
     }
 }

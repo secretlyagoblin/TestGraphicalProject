@@ -1,5 +1,6 @@
-﻿Heaven is a half pipe
-Sleaven is a glasspipe
-Hella is a stankpipe
-Blubba is a bunkpipe
-Dumpa
+﻿shape square size=5
+shape square size=10
+shape square size=15
+shape square size=20
+shape square size=25
+shape square size=30
